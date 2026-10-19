@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex">
-<title>화학 반응식 연습 — 학생용</title>
+<title>화학 연습 문항 — 학생용</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=Noto+Sans+KR:wght@400;500;700&family=IBM+Plex+Mono:wght@400;600&display=swap">
 <style>
@@ -35,21 +35,37 @@ body{background:var(--paper);color:var(--ink);font-family:'Noto Sans KR',system-
 .wrap{max-width:860px;margin:0 auto;padding-inline:18px;padding-block:0 64px;}
 .mono{font-family:'IBM Plex Mono','Consolas',monospace;font-variant-numeric:tabular-nums;}
 
-header{padding-block:34px 18px;border-bottom:2px solid var(--forest);}
+header{padding-block:34px 14px;}
 h1{font-family:'Gowun Batang',serif;font-size:clamp(27px,5vw,38px);font-weight:700;margin:0 0 6px;
    letter-spacing:-.6px;color:var(--head);text-wrap:balance;}
 .sub{color:var(--muted);font-size:13.5px;margin:0;}
+
+/* ── 단원 탭 ── */
+.tabs{display:flex;gap:2px;border-bottom:2px solid var(--forest);overflow-x:auto;scrollbar-width:none;}
+.tabs::-webkit-scrollbar{display:none;}
+.tab{flex:0 0 auto;appearance:none;background:transparent;border:0;border-radius:9px 9px 0 0;
+     color:var(--muted);font-family:inherit;font-size:14.5px;font-weight:700;padding:10px 18px 9px;
+     cursor:pointer;text-align:left;line-height:1.3;}
+.tab small{display:block;font-size:11.5px;font-weight:500;letter-spacing:.1px;}
+.tab:hover{color:var(--forest);background:var(--line2);}
+.tab[aria-selected="true"]{background:var(--forest);color:#fff;}
+:root[data-theme="dark"] .tab[aria-selected="true"],:root:not([data-theme="light"]) .tab[aria-selected="true"]{color:#0F1613;}
+@media (prefers-color-scheme:light){:root:not([data-theme="dark"]) .tab[aria-selected="true"]{color:#fff;}}
+
+.unithead{margin:16px 0 0;}
+.unithead .sub{font-size:13px;}
 
 .bar{position:sticky;top:0;z-index:20;background:var(--paper);border-bottom:1px solid var(--line);
      padding-block:11px;display:flex;gap:12px;align-items:center;flex-wrap:wrap;}
 .bar label{font-size:12.5px;color:var(--muted);font-weight:500;}
 select,input[type=text]{font-family:inherit;font-size:14px;color:var(--ink);background:var(--surface);
-     border:1px solid var(--line);border-radius:7px;padding:7px 10px;}
+     border:1px solid var(--line);border-radius:7px;padding:7px 10px;max-width:100%;}
 select:focus-visible,input:focus-visible,button:focus-visible{outline:2.5px solid var(--lime);outline-offset:2px;}
 .prog{flex:1;min-width:150px;display:flex;align-items:center;gap:9px;}
 .track{flex:1;height:7px;background:var(--line2);border-radius:99px;overflow:hidden;}
 .fill{height:100%;width:0;background:var(--lime);border-radius:99px;transition:width .35s ease;}
 .pnum{font-size:13px;color:var(--muted);white-space:nowrap;}
+.ulab{font-size:12px;font-weight:700;color:var(--forest);white-space:nowrap;}
 
 h2{font-family:'Gowun Batang',serif;font-size:22px;color:var(--head);margin:38px 0 4px;letter-spacing:-.3px;}
 .gsub{color:var(--muted);font-size:13px;margin:0 0 14px;}
@@ -65,7 +81,7 @@ h2{font-family:'Gowun Batang',serif;font-size:22px;color:var(--head);margin:38px
 .c1{background:var(--chip1bg);color:var(--chip1fg);}
 .c2{background:var(--chip2bg);color:var(--chip2fg);}
 .q{margin:0 0 12px;}
-.q .mono{font-weight:600;}
+.qsub{margin:-6px 0 12px;font-size:13.5px;color:var(--ink2);background:var(--line2);border-radius:7px;padding:8px 11px;}
 .eqline{background:var(--limebg);border:1px solid var(--line);border-radius:8px;padding:11px 13px;
         margin:10px 0;font-family:'IBM Plex Mono',monospace;font-size:15px;font-weight:600;
         display:flex;gap:7px;align-items:center;flex-wrap:wrap;line-height:2.1;}
@@ -76,10 +92,10 @@ h2{font-family:'Gowun Batang',serif;font-size:22px;color:var(--head);margin:38px
 .btns{display:flex;gap:9px;flex-wrap:wrap;margin-top:12px;}
 button{font-family:inherit;font-size:14px;font-weight:600;border-radius:8px;padding:8px 15px;
        border:1px solid var(--forest);background:var(--forest);color:#fff;cursor:pointer;}
-:root[data-theme="dark"] button,:root:not([data-theme="light"]) button{color:#0F1613;}
-@media (prefers-color-scheme:light){:root:not([data-theme="dark"]) button{color:#fff;}}
+:root[data-theme="dark"] button:not(.tab),:root:not([data-theme="light"]) button:not(.tab){color:#0F1613;}
+@media (prefers-color-scheme:light){:root:not([data-theme="dark"]) button:not(.tab){color:#fff;}}
 button.ghost{background:transparent;color:var(--forest);border-color:var(--line);}
-button:disabled{opacity:.45;cursor:default;}
+.tabs .tab{border:0;}
 
 .fb{margin-top:12px;border-radius:8px;padding:12px 14px;font-size:14px;display:none;}
 .fb.show{display:block;}
@@ -105,47 +121,41 @@ ol.steps li{margin-bottom:5px;}
 .sc{display:flex;flex-direction:column;}
 .sc b{font-family:'IBM Plex Mono',monospace;font-size:30px;font-weight:600;line-height:1.15;}
 .sc span{font-size:12px;opacity:.8;}
-.summary button{background:#F4F7F1;color:var(--forest);border-color:#F4F7F1;}
+:root .summary button:not(.ghost):not(.tab){background:#F4F7F1;color:#14532D;border-color:#F4F7F1;}
 .note{font-size:12.5px;opacity:.85;margin-top:10px;}
-
-.teach{margin-top:30px;border:1px solid var(--line);border-radius:11px;background:var(--surface);padding:16px 18px;}
-.teach h3{font-family:'Gowun Batang',serif;font-size:18px;margin:0 0 4px;color:var(--head);}
-table{width:100%;border-collapse:collapse;font-size:13.5px;margin-top:11px;}
-th,td{border-bottom:1px solid var(--line2);padding:7px 8px;text-align:left;}
-th{color:var(--muted);font-weight:600;font-size:12px;text-transform:uppercase;letter-spacing:.4px;}
-.tw{overflow-x:auto;}
-.rate{display:inline-block;min-width:46px;}
 footer{margin-top:34px;padding-top:16px;border-top:1px solid var(--line);font-size:12.5px;color:var(--muted);}
-@media (max-width:560px){ .blank{width:54px;} .eqline{font-size:14px;} }
+@media (max-width:560px){ .blank{width:54px;} .eqline{font-size:14px;} select{width:100%;} .tab{padding:9px 13px 8px;} }
+[hidden]{display:none!important}
 </style>
-<style>body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
 </head>
 <body>
 
-
 <div class="wrap">
 <header>
-  <h1>화학 반응식 연습</h1>
-  <p class="sub">Ⅰ-03 화학 반응의 양적 관계 · 교과서 33~39쪽 · [12화학01-03] · 3주차 형성평가 — 온세종학교 화학</p>
+  <h1>화학 연습 문항</h1>
+  <p class="sub">온세종학교 공동교육과정 화학 · 단원별 형성평가와 정기시험 대비 · 2026학년도 2학기</p>
 </header>
+
+<nav class="tabs" id="tabs" role="tablist" aria-label="단원"></nav>
+<div class="unithead"><p class="sub" id="usub"></p></div>
 
 <div class="bar">
   <label for="who">이름</label>
   <input type="text" id="who" placeholder="학교와 이름" autocomplete="off" style="width:180px">
-  <div class="prog"><div class="track"><div class="fill" id="fill"></div></div><span class="pnum" id="pnum">0 / 12</span></div>
+  <div class="prog"><span class="ulab" id="ulab"></span><div class="track"><div class="fill" id="fill"></div></div><span class="pnum" id="pnum">0 / 0</span></div>
 </div>
 
-<div id="groups"></div>
+<div id="panels"></div>
 
 <div class="summary">
-  <h3>오늘의 결과</h3>
+  <h3 id="sTitle">오늘의 결과</h3>
   <p style="margin:0;font-size:13.5px;opacity:.9">틀린 문항은 「개인 학습 노트」 상시 기록 ②에 <b>왜 틀렸는지</b>까지 적으세요.</p>
   <div class="scores">
     <div class="sc"><b id="sScore">0</b><span>맞힌 문항</span></div>
     <div class="sc"><b id="sTried">0</b><span>푼 문항</span></div>
-    <div class="sc"><b id="sInteg">0 / 5</b><span>통합과학 연계</span></div>
+    <div class="sc"><b id="sInteg">0 / 0</b><span>통합과학 연계</span></div>
   </div>
-  <div class="btns"><button id="save">결과 코드 만들기</button><button id="reset" class="ghost" style="background:transparent;color:#F4F7F1;border-color:rgba(255,255,255,.4)">다시 풀기</button></div>
+  <div class="btns"><button id="save">결과 코드 만들기</button><button id="reset" class="ghost" style="background:transparent;color:inherit;border-color:rgba(255,255,255,.4)">이 단원 다시 풀기</button></div>
   <div id="codeBox" style="display:none;margin-top:14px">
     <label for="code" style="font-size:12.5px;opacity:.85;display:block;margin-bottom:5px">아래 한 줄을 복사해 클래스룸 과제에 제출하세요</label>
     <textarea id="code" readonly rows="2" style="width:100%;font-family:'IBM Plex Mono',monospace;font-size:13px;
@@ -155,91 +165,22 @@ footer{margin-top:34px;padding-top:16px;border-top:1px solid var(--line);font-si
   <p class="note" id="saveNote">푼 내용은 이 브라우저에 저장되어, 창을 닫았다 열어도 남아 있습니다.</p>
 </div>
 
-
-</div>
-
 <footer>
-  비상교육 「화학」 교과서 33~39쪽 · 수업활용북 Ⅰ-03 대응. <b>[통합과학 연계]</b> 표시는 통합과학 화학 영역(화학 반응식·질량 보존)과 겹치는 문항입니다.
-  몰 계산이 들어간 문항은 <b>[화학 Ⅰ]</b>로, 통합과학 범위 밖입니다.<br>적은 이름과 푼 내용은 <b>이 브라우저에만</b> 저장되며 어디로도 전송되지 않습니다. 제출은 <b>결과 코드</b>를 복사해 클래스룸에 올리는 방식입니다.
+  <span id="ufoot"></span><br>
+  적은 이름과 푼 내용은 <b>이 브라우저에만</b> 저장되며 어디로도 전송되지 않습니다. 제출은 <b>결과 코드</b>를 복사해 클래스룸에 올리는 방식입니다.
 </footer>
 </div>
 
+<!-- ▼ 단원 문항 파일. 새 단원은 data/unit3.js 를 만들고 아래에 한 줄 추가하면 탭이 생깁니다. -->
+<script src="data/unit1.js"></script>
+<script src="data/unit2.js"></script>
+
 <script>
-const S="(s)",L="(l)",G="(g)",AQ="(aq)";
-const ITEMS=[
- {id:"A1",g:0,tag:1,q:'다음 물질을 화학 반응식에 쓸 때 붙이는 상태 표시를 고르시오.',
-  ins:[{t:"sel",lab:"구리",a:"(s)"},{t:"sel",lab:"물",a:"(l)"},{t:"sel",lab:"산소",a:"(g)"},{t:"sel",lab:"염화 나트륨 수용액",a:"(aq)"}],
-  opts:["(s)","(l)","(g)","(aq)"],
-  ex:'고체는 (s), 액체는 (l), 기체는 (g), 물에 녹아 있는 상태는 (aq)입니다. (aq)는 aqueous(수용액)의 약자입니다.',
-  st:['구리는 실온에서 금속 고체 → (s)','물은 실온에서 액체 → (l)','산소는 실온에서 기체 → (g)','물에 녹아 있으면 수용액 → (aq)']},
-
- {id:"A2",g:0,tag:1,eq:['CH₄ + ','O₂ → ','CO₂ + ','H₂O'],
-  q:'메테인의 완전 연소입니다. 빈칸에 계수를 넣어 반응식을 완성하시오. (1도 직접 쓰시오)',
-  ins:[{t:"num",a:2},{t:"num",a:1},{t:"num",a:2}],
-  ex:'CH₄ + 2O₂ → CO₂ + 2H₂O. 탄소 1개, 수소 4개를 먼저 맞추면 산소는 자동으로 정해집니다.',
-  st:['C를 맞춘다 — 왼쪽 1개이므로 CO₂ 계수는 1','H를 맞춘다 — 왼쪽 4개이므로 H₂O 계수는 2','O를 센다 — 오른쪽은 2(CO₂) + 2(H₂O) = 4개','왼쪽 O₂ 계수는 4 ÷ 2 = 2']},
-
- {id:"A3",g:0,tag:1,eq:['N₂ + ','H₂ → ','NH₃'],
-  q:'암모니아 합성입니다. 계수를 넣으시오.',
-  ins:[{t:"num",a:3},{t:"num",a:2}],
-  ex:'N₂ + 3H₂ → 2NH₃. 하버가 개발한 반응으로, 1주차에 다룬 그 반응입니다.',
-  st:['N을 맞춘다 — 왼쪽 2개이므로 NH₃ 계수는 2','H를 센다 — 오른쪽은 2 × 3 = 6개','왼쪽 H₂ 계수는 6 ÷ 2 = 3']},
-
- {id:"A4",g:0,tag:1,eq:['','Fe₂O₃ + ','C → ','Fe + ','CO₂'],
-  q:'철의 제련입니다. 산화 철(Ⅲ)과 탄소가 반응해 철과 이산화 탄소가 생깁니다. 맨 앞 계수부터 차례로 넣으시오.',
-  ins:[{t:"num",a:2},{t:"num",a:3},{t:"num",a:4},{t:"num",a:3}],
-  ex:'2Fe₂O₃ + 3C → 4Fe + 3CO₂. Fe 4개, O 6개, C 3개로 양쪽이 같습니다.',
-  st:['O 개수가 까다롭다 — Fe₂O₃ 계수를 2로 두면 O가 6개','O 6개가 CO₂로 가려면 CO₂ 계수는 3 (O 3 × 2 = 6)','C를 맞춘다 — 오른쪽 3개이므로 왼쪽 C 계수는 3','Fe를 맞춘다 — 왼쪽 2 × 2 = 4개이므로 Fe 계수는 4']},
-
- {id:"B1",g:1,tag:2,q:'화학 반응식의 계수비가 나타내는 것을 고르시오.',
-  ins:[{t:"sel",lab:"모든 물질에서",a:"몰비",o:["몰비","질량비","입자의 크기비"]},
-       {t:"sel",lab:"기체끼리, 같은 온도·압력에서",a:"부피비",o:["부피비","질량비","밀도비"]}],
-  ex:'계수비 = 몰비입니다. 기체끼리는 같은 온도·압력에서 부피가 몰수에 비례하므로 부피비도 계수비와 같습니다. <b>계수비는 질량비가 아닙니다.</b>',
-  st:['계수는 반응에 참여하는 입자의 개수비를 나타낸다','개수비를 몰 단위로 읽은 것이 몰비','아보가드로 법칙에 따라 같은 온도·압력에서 기체의 부피는 몰수에 비례','따라서 기체끼리는 계수비 = 부피비']},
-
- {id:"B2",g:1,tag:2,q:'수소(H₂) 4.0 g을 산소와 완전히 반응시켰습니다. 생성되는 물의 질량은? (몰질량 H 1.0, O 16.0 g/mol)',
-  ins:[{t:"num",lab:"물의 질량",unit:"g",a:36}],
-  ex:'36.0 g. 수소 4.0 g은 2 mol이고, 2H₂ + O₂ → 2H₂O에서 H₂ : H₂O = 1 : 1이므로 물도 2 mol, 즉 36.0 g입니다.',
-  st:['반응식 — 2H₂ + O₂ → 2H₂O','H₂ 몰질량 = 2.0 g/mol → 4.0 ÷ 2.0 = 2 mol','계수비 H₂ : H₂O = 2 : 2 = 1 : 1 → 물 2 mol','H₂O 몰질량 = 18.0 g/mol → 2 × 18.0 = 36.0 g']},
-
- {id:"B3",g:1,tag:2,q:'프로페인(C₃H₈) 11 g을 완전 연소시켰습니다. 0 °C·1기압에서 반응한 산소의 부피와 생성된 물의 질량은? (C 12.0, H 1.0, O 16.0 g/mol)',
-  ins:[{t:"num",lab:"산소의 부피",unit:"L",a:28},{t:"num",lab:"물의 질량",unit:"g",a:18}],
-  ex:'산소 28 L, 물 18.0 g. C₃H₈ + 5O₂ → 3CO₂ + 4H₂O에서 프로페인 0.25 mol이 반응합니다.',
-  st:['반응식 — C₃H₈ + 5O₂ → 3CO₂ + 4H₂O','C₃H₈ 몰질량 = 12.0×3 + 1.0×8 = 44.0 → 11 ÷ 44.0 = 0.25 mol','O₂ = 0.25 × 5 = 1.25 mol → 1.25 × 22.4 = 28 L','H₂O = 0.25 × 4 = 1 mol → 1 × 18.0 = 18.0 g']},
-
- {id:"B4",g:1,tag:2,eq:['','A(g) + ','B(g) → ','C(g)'],
-  q:'같은 온도와 압력에서 기체 A 10 mL와 기체 B 30 mL가 모두 반응하여 기체 C 20 mL가 생성되었습니다. 계수를 넣으시오.',
-  ins:[{t:"num",a:1},{t:"num",a:3},{t:"num",a:2}],
-  ex:'A(g) + 3B(g) → 2C(g). 기체끼리는 부피비가 곧 계수비입니다. 10 : 30 : 20 = 1 : 3 : 2.',
-  st:['기체끼리, 같은 온도·압력 → 부피비 = 계수비','10 : 30 : 20 을 가장 간단한 정수비로 → 1 : 3 : 2','그대로 계수로 옮긴다']},
-
- {id:"B5",g:1,tag:2,q:'0 °C·1기압에서 메테인(CH₄) 11.2 L를 완전 연소시키려면 산소(O₂)가 몇 L 필요합니까?',
-  ins:[{t:"num",lab:"산소의 부피",unit:"L",a:22.4}],
-  ex:'22.4 L. CH₄ 11.2 L는 0.5 mol이고, CH₄ : O₂ = 1 : 2이므로 O₂는 1 mol = 22.4 L입니다.',
-  st:['반응식 — CH₄ + 2O₂ → CO₂ + 2H₂O','CH₄ = 11.2 ÷ 22.4 = 0.5 mol','O₂ = 0.5 × 2 = 1 mol','1 × 22.4 = 22.4 L','※ 기체끼리라 11.2 × 2 = 22.4 L로 부피비를 바로 써도 됩니다']},
-
- {id:"C1",g:2,tag:2,q:'수소(H₂) 3 mol과 산소(O₂) 1 mol을 넣고 반응시켰습니다. 생성되는 물의 최대 양과, 남는 물질의 종류·양은?',
-  ins:[{t:"num",lab:"생성된 물",unit:"mol",a:2},{t:"sel",lab:"남는 물질",a:"H₂",o:["H₂","O₂","없음"]},{t:"num",lab:"남는 양",unit:"mol",a:1}],
-  ex:'물 2 mol, H₂ 1 mol이 남습니다. 산소가 한계 반응물입니다.',
-  st:['반응식 — 2H₂ + O₂ → 2H₂O','각 반응물을 계수로 나눈다 — H₂: 3 ÷ 2 = 1.5, O₂: 1 ÷ 1 = 1','값이 작은 O₂가 먼저 바닥난다 → <b>O₂가 한계 반응물</b>','O₂ 1 mol이 다 반응하면 H₂O는 2 mol 생성','이때 H₂는 2 mol만 쓰이므로 3 − 2 = 1 mol 남는다']},
-
- {id:"C2",g:2,tag:1,q:'탄산 칼슘(CaCO₃) 10.0 g을 가열했더니 이산화 탄소 4.4 g이 발생하고 산화 칼슘(CaO)이 남았습니다. 남은 산화 칼슘의 질량은?',
-  ins:[{t:"num",lab:"산화 칼슘",unit:"g",a:5.6}],
-  ex:'5.6 g. 질량 보존 법칙에 따라 10.0 − 4.4 = 5.6 g입니다. 몰로 계산해도 같습니다.',
-  st:['반응식 — CaCO₃ → CaO + CO₂','질량 보존 — 반응 전후 전체 질량은 변하지 않는다','10.0 g (CaCO₃) = CaO + 4.4 g (CO₂)','CaO = 10.0 − 4.4 = 5.6 g','확인: CaCO₃ 100.0 g/mol → 0.1 mol, CaO 56.0 × 0.1 = 5.6 g ✓']},
-
- {id:"C3",g:2,tag:2,eq:['','A + ','B → C'],
-  q:'A 1 mol이 든 용기에 B를 조금씩 넣었더니, B를 3 mol 넣은 순간부터 생성물 C의 양이 더 이상 늘지 않았습니다. A와 B의 계수비는?',
-  ins:[{t:"num",a:1},{t:"num",a:3}],
-  ex:'A : B = 1 : 3. C가 더 늘지 않는 지점이 A가 모두 소모된 지점이고, 그때까지 들어간 B의 양이 곧 계수비입니다.',
-  st:['C가 늘지 않는다 = 한계 반응물이 A로 바뀌었다 = A가 다 소모되었다','A 1 mol이 다 쓰일 때까지 B가 3 mol 들어갔다','따라서 A : B = 1 : 3','이 그래프 해석이 한계 반응물 문제의 표준 유형이다']}
-];
-const GROUPS=[
- {t:"A. 화학 반응식 쓰기",s:"상태 표시와 계수 맞추기 — 통합과학 화학 영역과 겹치는 부분입니다"},
- {t:"B. 계수비와 양적 관계",s:"계수비를 몰로 읽고, 질량·부피로 건너가는 연습"},
- {t:"C. 한계 반응물과 그래프",s:"먼저 바닥나는 물질이 결과를 정합니다"}
-];
-const state={}; ITEMS.forEach(i=>state[i.id]={tried:false,ok:false});
+const UNITS = window.ONSJ_UNITS || [];
+const NAMEKEY = "chem-who", TABKEY = "chem-tab";
+const ST = {};                                   // ST[unitId][itemId] = {tried, ok}
+UNITS.forEach(u => { ST[u.id] = {}; u.items.forEach(i => ST[u.id][i.id] = {tried:false, ok:false}); });
+let cur = UNITS[0] && UNITS[0].id;
 
 function esc(s){return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
 function norm(v){return String(v??"").trim().replace(/\s+/g,"").replace(/,/g,"");}
@@ -248,129 +189,152 @@ function same(v,a){
   if(typeof a==="number"){const x=parseFloat(n); return Number.isFinite(x)&&Math.abs(x-a)<1e-6;}
   return n===norm(a);
 }
-function inputHTML(it,ins,k){
-  const id=it.id+"_"+k;
+const U  = id => UNITS.find(u => u.id === id);
+const EL = (u,it,k) => document.getElementById(u.id+"_"+it.id+"_"+k);
+
+/* ── 그리기 ── */
+function inputHTML(u,it,ins,k){
+  const id=u.id+"_"+it.id+"_"+k;
   if(ins.t==="sel"){
-    const opts=ins.o||it.opts||[];
-    return `<select id="${id}" data-i="${it.id}" data-k="${k}"><option value="">—</option>`+
+    const opts=ins.o||ins.opts||it.opts||[];
+    return `<select id="${id}" data-u="${u.id}" data-i="${it.id}" data-k="${k}"><option value="">—</option>`+
       opts.map(o=>`<option>${esc(o)}</option>`).join("")+`</select>`;
   }
-  return `<input type="text" inputmode="decimal" class="blank${ins.unit?" w":""}" id="${id}" data-i="${it.id}" data-k="${k}" autocomplete="off">`;
+  return `<input type="text" inputmode="decimal" class="blank${ins.unit?" w":""}" id="${id}" data-u="${u.id}" data-i="${it.id}" data-k="${k}" autocomplete="off">`;
 }
-function cardHTML(it){
-  let body="";
+function bodyHTML(u,it){
   if(it.eq){
-    body+='<div class="eqline">';
-    it.eq.forEach((seg,k)=>{ body+=(seg?`<span>${esc(seg)}</span>`:"");
-      if(k<it.ins.length) body+=inputHTML(it,it.ins[k],k); });
-    // trailing segment already included; if eq longer than ins, remaining text printed
-    body+='</div>';
-  } else {
-    body+=it.ins.map((ins,k)=>`<div class="inl"><span class="lab">${esc(ins.lab||"")}</span>${inputHTML(it,ins,k)}${ins.unit?`<span class="lab">${esc(ins.unit)}</span>`:""}</div>`).join("");
+    let h='<div class="eqline">';
+    for(let k=0;k<it.eq.length;k++){
+      if(it.eq[k]) h+=`<span>${esc(it.eq[k])}</span>`;
+      if(k<it.ins.length) h+=inputHTML(u,it,it.ins[k],k);
+    }
+    return h+'</div>';
   }
-  return `<div class="card" id="c_${it.id}">
-    <div class="chead"><span class="qn">${it.id}</span>
-      <span class="chip ${it.tag===1?"c1":"c2"}">${it.tag===1?"통합과학 연계":"화학 Ⅰ"}</span></div>
-    <p class="q">${it.q}</p>
-    ${body}
-    <div class="btns"><button data-check="${it.id}">확인</button></div>
-    <div class="fb" id="f_${it.id}"></div>
-  </div>`;
-}
-function eqRender(it){
-  // rebuild equation with correct interleaving of text + inputs
-  let h='<div class="eqline">';
-  for(let k=0;k<it.eq.length;k++){
-    if(it.eq[k]) h+=`<span>${esc(it.eq[k])}</span>`;
-    if(k<it.ins.length) h+=inputHTML(it,it.ins[k],k);
-  }
-  return h+'</div>';
+  return it.ins.map((ins,k)=>`<div class="inl"><span class="lab">${esc(ins.lab||"")}</span>${inputHTML(u,it,ins,k)}${ins.unit?`<span class="lab">${esc(ins.unit)}</span>`:""}</div>`).join("");
 }
 (function render(){
-  const root=document.getElementById("groups");
-  root.innerHTML=GROUPS.map((g,gi)=>
-    `<h2>${esc(g.t)}</h2><p class="gsub">${esc(g.s)}</p>`+
-    ITEMS.filter(i=>i.g===gi).map(it=>{
-      let body = it.eq ? eqRender(it)
-        : it.ins.map((ins,k)=>`<div class="inl"><span class="lab">${esc(ins.lab||"")}</span>${inputHTML(it,ins,k)}${ins.unit?`<span class="lab">${esc(ins.unit)}</span>`:""}</div>`).join("");
-      return `<div class="card" id="c_${it.id}">
-        <div class="chead"><span class="qn">${it.id}</span>
-          <span class="chip ${it.tag===1?"c1":"c2"}">${it.tag===1?"통합과학 연계":"화학 Ⅰ"}</span></div>
-        <p class="q">${it.q}</p>${body}
-        <div class="btns"><button data-check="${it.id}">확인</button></div>
-        <div class="fb" id="f_${it.id}"></div></div>`;
-    }).join("")
-  ).join("");
+  document.getElementById("tabs").innerHTML = UNITS.map(u =>
+    `<button class="tab" role="tab" data-tab="${u.id}" aria-selected="false">${esc(u.label)}<small>${esc(u.title)}</small></button>`).join("");
+  document.getElementById("panels").innerHTML = UNITS.map(u =>
+    `<section id="p_${u.id}" role="tabpanel" hidden>`+
+    u.groups.map((g,gi)=>{
+      const list=u.items.filter(i=>i.g===gi); if(!list.length) return "";
+      const t=typeof g==="string"?g:g.t, s=typeof g==="string"?"":(g.s||"");
+      return `<h2>${esc(t)}</h2>${s?`<p class="gsub">${esc(s)}</p>`:""}`+
+        list.map(it=>`<div class="card" id="c_${u.id}_${it.id}">
+          <div class="chead"><span class="qn">${it.id}</span>
+            <span class="chip ${it.tag===1?"c1":"c2"}">${it.tag===1?"통합과학 연계":"화학 Ⅰ"}</span></div>
+          <p class="q">${it.q}</p>${it.sub?`<p class="qsub">${it.sub}</p>`:""}${bodyHTML(u,it)}
+          <div class="btns"><button data-check="${it.id}" data-u="${u.id}">확인</button></div>
+          <div class="fb" id="f_${u.id}_${it.id}"></div></div>`).join("");
+    }).join("")+`</section>`).join("");
 })();
 
-function check(id,quiet){
-  const it=ITEMS.find(x=>x.id===id);
-  const got=it.ins.map((ins,k)=>document.getElementById(id+"_"+k).value);
-  const each=it.ins.map((ins,k)=>same(got[k],ins.a));
-  const ok=each.every(Boolean);
-  state[id]={tried:true,ok};
-  const card=document.getElementById("c_"+id);
+/* ── 채점 ── */
+function check(uid,id,quiet){
+  const u=U(uid), it=u.items.find(x=>x.id===id);
+  const got=it.ins.map((ins,k)=>EL(u,it,k).value);
+  const ok=it.ins.every((ins,k)=>same(got[k],ins.a));
+  ST[uid][id]={tried:true,ok};
+  const card=document.getElementById("c_"+uid+"_"+id);
   card.classList.toggle("ok",ok); card.classList.toggle("no",!ok);
-  const ansList=it.ins.map((ins,k)=>`${ins.lab?esc(ins.lab)+" ":""}<b class="mono">${esc(ins.a)}</b>${ins.unit?" "+esc(ins.unit):""}`).join(" &nbsp;·&nbsp; ");
-  const fb=document.getElementById("f_"+id);
+  const ansList=it.ins.map(ins=>`${ins.lab?esc(ins.lab)+" ":""}<b class="mono">${esc(ins.a)}</b>${ins.unit?" "+esc(ins.unit):""}`).join(" &nbsp;·&nbsp; ");
+  const fb=document.getElementById("f_"+uid+"_"+id);
   fb.className="fb show "+(ok?"good":"bad");
   fb.innerHTML=`<span class="v">${ok?"맞았습니다":"다시 보세요"}</span>${it.ex}
     <div class="ansrow">정답 — ${ansList}</div>
-    <details><summary>단계별 풀이 보기</summary><ol class="steps">${it.st.map(s=>`<li>${s}</li>`).join("")}</ol></details>`;
-  tally();
-  if(!quiet&&typeof persist==="function") persist();
+    ${it.st?`<details><summary>단계별 풀이 보기</summary><ol class="steps">${it.st.map(s=>`<li>${s}</li>`).join("")}</ol></details>`:""}`;
+  if(!quiet){ tally(); persist(uid); }
 }
 function tally(){
-  const tried=ITEMS.filter(i=>state[i.id].tried).length;
-  const ok=ITEMS.filter(i=>state[i.id].ok).length;
-  const integ=ITEMS.filter(i=>i.tag===1&&state[i.id].ok).length;
+  const u=U(cur); if(!u) return;
+  const s=ST[cur], items=u.items;
+  const tried=items.filter(i=>s[i.id].tried).length;
+  const ok=items.filter(i=>s[i.id].ok).length;
+  const integAll=items.filter(i=>i.tag===1).length;
+  const integ=items.filter(i=>i.tag===1&&s[i.id].ok).length;
   document.getElementById("sScore").textContent=ok;
   document.getElementById("sTried").textContent=tried;
-  document.getElementById("sInteg").textContent=integ+" / 5";
-  document.getElementById("pnum").textContent=tried+" / "+ITEMS.length;
-  document.getElementById("fill").style.width=(tried/ITEMS.length*100)+"%";
+  document.getElementById("sInteg").textContent=integ+" / "+integAll;
+  document.getElementById("pnum").textContent=tried+" / "+items.length;
+  document.getElementById("fill").style.width=(items.length?tried/items.length*100:0)+"%";
 }
-document.addEventListener("click",e=>{
-  const b=e.target.closest("[data-check]"); if(b) check(b.dataset.check);
-});
-document.addEventListener("keydown",e=>{
-  if(e.key==="Enter"&&e.target.matches("input.blank")){e.preventDefault();check(e.target.dataset.i);}
-});
-document.getElementById("reset").addEventListener("click",()=>{
-  ITEMS.forEach(it=>{ state[it.id]={tried:false,ok:false};
-    it.ins.forEach((_,k)=>{const el=document.getElementById(it.id+"_"+k); if(el) el.value="";});
-    const c=document.getElementById("c_"+it.id); c.classList.remove("ok","no");
-    const f=document.getElementById("f_"+it.id); f.className="fb"; f.innerHTML="";});
-  tally(); try{localStorage.removeItem(KEY);}catch(e){} const cb=document.getElementById("codeBox"); if(cb) cb.style.display="none"; window.scrollTo({top:0,behavior:"smooth"});
-});
-tally();
 
-/* ---- 진행 상황 저장 (이 브라우저) + 결과 코드 ---- */
-const KEY="chem-w3-v1";
+/* ── 탭 ── */
+function show(uid){
+  const u=U(uid); if(!u) return;
+  cur=uid;
+  UNITS.forEach(x=>{
+    document.getElementById("p_"+x.id).hidden = x.id!==uid;
+    document.querySelector(`[data-tab="${x.id}"]`).setAttribute("aria-selected", x.id===uid?"true":"false");
+  });
+  document.getElementById("usub").textContent=u.sub||"";
+  document.getElementById("ulab").textContent=u.label;
+  document.getElementById("sTitle").textContent=u.label+" 결과";
+  document.getElementById("ufoot").innerHTML=u.foot||"";
+  document.getElementById("codeBox").style.display="none";
+  note.textContent="푼 내용은 이 브라우저에 저장되어, 창을 닫았다 열어도 남아 있습니다.";
+  try{localStorage.setItem(TABKEY,uid);}catch(e){}
+  tally();
+}
+
+/* ── 저장 (단원별 키 — Ⅰ단원은 기존 페이지 키 그대로) ── */
 const who=document.getElementById("who");
 const note=document.getElementById("saveNote");
 const codeBox=document.getElementById("codeBox"), codeEl=document.getElementById("code");
 
-function persist(){
-  try{ localStorage.setItem(KEY, JSON.stringify({who:who.value, state,
-    vals:Object.fromEntries(ITEMS.flatMap(it=>it.ins.map((_,k)=>[it.id+"_"+k, (document.getElementById(it.id+"_"+k)||{}).value||""])))
+function persist(uid){
+  const u=U(uid);
+  try{ localStorage.setItem(u.key||("chem-"+uid), JSON.stringify({who:who.value, state:ST[uid],
+    vals:Object.fromEntries(u.items.flatMap(it=>it.ins.map((_,k)=>[it.id+"_"+k,(EL(u,it,k)||{}).value||""])))
   })); }catch(e){}
 }
 function restore(){
-  let d=null; try{ d=JSON.parse(localStorage.getItem(KEY)||"null"); }catch(e){}
-  if(!d) return;
-  if(d.who) who.value=d.who;
-  if(d.vals) for(const [id,v] of Object.entries(d.vals)){ const el=document.getElementById(id); if(el) el.value=v; }
-  if(d.state) ITEMS.forEach(it=>{ const st=d.state[it.id]; if(st&&st.tried){ check(it.id,true); } });
-  tally();
+  let name="";
+  try{ name=localStorage.getItem(NAMEKEY)||""; }catch(e){}
+  UNITS.forEach(u=>{
+    let d=null; try{ d=JSON.parse(localStorage.getItem(u.key||("chem-"+u.id))||"null"); }catch(e){}
+    if(!d) return;
+    if(!name && d.who) name=d.who;
+    if(d.vals) for(const [k,v] of Object.entries(d.vals)){ const el=document.getElementById(u.id+"_"+k); if(el) el.value=v; }
+    if(d.state) u.items.forEach(it=>{ const s=d.state[it.id]; if(s&&s.tried) check(u.id,it.id,true); });
+  });
+  who.value=name;
+}
+function saveName(){
+  try{ localStorage.setItem(NAMEKEY, who.value); }catch(e){}
+  UNITS.forEach(u=>persist(u.id));
 }
 
+/* ── 이벤트 ── */
+document.addEventListener("click",e=>{
+  const t=e.target.closest("[data-tab]"); if(t){ show(t.dataset.tab); return; }
+  const b=e.target.closest("[data-check]"); if(b) check(b.dataset.u,b.dataset.check);
+});
+document.addEventListener("keydown",e=>{
+  if(e.key==="Enter"&&e.target.matches("input.blank")){e.preventDefault();check(e.target.dataset.u,e.target.dataset.i);}
+});
+document.addEventListener("change",e=>{ if(e.target.dataset&&e.target.dataset.u) persist(e.target.dataset.u); });
+who.addEventListener("input",saveName);
+
+document.getElementById("reset").addEventListener("click",()=>{
+  const u=U(cur);
+  if(!confirm(u.label+"의 풀이 기록을 지웁니다. 계속할까요?")) return;
+  u.items.forEach(it=>{ ST[cur][it.id]={tried:false,ok:false};
+    it.ins.forEach((_,k)=>{const el=EL(u,it,k); if(el) el.value="";});
+    document.getElementById("c_"+cur+"_"+it.id).classList.remove("ok","no");
+    const f=document.getElementById("f_"+cur+"_"+it.id); f.className="fb"; f.innerHTML="";});
+  try{localStorage.removeItem(u.key||("chem-"+cur));}catch(e){}
+  codeBox.style.display="none"; tally(); window.scrollTo({top:0,behavior:"smooth"});
+});
 document.getElementById("save").addEventListener("click",()=>{
   const name=who.value.trim();
   if(!name){ note.textContent="먼저 이름을 적으세요."; who.focus(); return; }
-  const marks=ITEMS.map(i=>i.id+(state[i.id].tried?(state[i.id].ok?"O":"X"):"-")).join(" ");
-  const ok=ITEMS.filter(i=>state[i.id].ok).length;
-  codeEl.value="화학 3주차 | "+name+" | "+ok+"/"+ITEMS.length+" | "+marks;
+  const u=U(cur), s=ST[cur];
+  const marks=u.items.map(i=>i.id+(s[i.id].tried?(s[i.id].ok?"O":"X"):"-")).join(" ");
+  const ok=u.items.filter(i=>s[i.id].ok).length;
+  codeEl.value=(u.codeTag||("화학 "+u.label))+" | "+name+" | "+ok+"/"+u.items.length+" | "+marks;
   codeBox.style.display="block";
   note.textContent="코드를 복사해 클래스룸 과제에 붙여넣으세요. O는 맞힘, X는 틀림, -는 안 푼 문항입니다.";
   codeEl.focus(); codeEl.select();
@@ -380,9 +344,13 @@ document.getElementById("copy").addEventListener("click",async()=>{
   try{ await navigator.clipboard.writeText(codeEl.value); note.textContent="복사했습니다."; }
   catch(e){ note.textContent="복사가 막혀 있으면, 위 칸을 길게 눌러 직접 복사하세요."; }
 });
-who.addEventListener("input",persist);
-restore();
-</script>
 
+/* ── 시작 ── */
+restore();
+let start=cur;
+try{ const t=localStorage.getItem(TABKEY); if(t&&U(t)) start=t; }catch(e){}
+const q=new URLSearchParams(location.search).get("u"); if(q&&U(q)) start=q;   // ?u=u2 로 특정 단원 바로 열기
+show(start);
+</script>
 </body>
 </html>
